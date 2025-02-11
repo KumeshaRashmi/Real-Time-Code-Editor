@@ -1,19 +1,16 @@
-import  { useState } from "react";
-import CodeEditor from "./components/CodeEditor";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RoomForm from "./components/RoomForm";
+import CodeEditor from "./components/CodeEditor";
+
 
 const App = () => {
-  const [roomJoined, setRoomJoined] = useState(false);
-
-  const joinRoom = (room) => {
-    console.log("Joined room:", room);
-    setRoomJoined(true);
-  };
-
   return (
-    <div>
-      {roomJoined ? <CodeEditor /> : <RoomForm joinRoom={joinRoom} />}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<RoomForm />} />
+        <Route path="/editor/:roomId" element={<CodeEditor />} />
+      </Routes>
+    </Router>
   );
 };
 

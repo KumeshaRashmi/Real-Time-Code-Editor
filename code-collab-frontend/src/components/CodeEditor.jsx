@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000"); // Adjust for your backend
-
+const socket = io("http://localhost:8080");
 const CodeEditor = () => {
   const [code, setCode] = useState("// Start coding...");
 
