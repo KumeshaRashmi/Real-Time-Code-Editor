@@ -1,48 +1,133 @@
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
+
+// const RoomForm = () => {
+//   const [room, setRoom] = useState("");
+//   const navigate = useNavigate();
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     if (room.trim()) {
+//       navigate(`/editor/${room}`);
+//     }
+//   };
+
+//   return (
+//     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-purple-600 to-blue-500 p-4">
+//       <Card sx={{ width: "100%", maxWidth: 400, boxShadow: 6, borderRadius: 3 }}>
+//         <CardContent sx={{ p: 4 }}>
+//           <Typography variant="h5" align="center" sx={{ fontWeight: "bold", color: "gray.800", mb: 3 }}>
+//             Join a Room
+//           </Typography>
+//           <form onSubmit={handleSubmit} className="space-y-4">
+//             <TextField
+//               label="Enter Room ID"
+//               variant="outlined"
+//               fullWidth
+//               value={room}
+//               onChange={(e) => setRoom(e.target.value)}
+//               sx={{ backgroundColor: "white", borderRadius: 2 }}
+//             />
+//             <Button
+//               type="submit"
+//               variant="contained"
+//               fullWidth
+//               sx={{
+//                 backgroundColor: "blue.600",
+//                 "&:hover": { backgroundColor: "blue.700" },
+//                 py: 1.5,
+//                 borderRadius: 2,
+//               }}
+//             >
+//               Join Room
+//             </Button>
+//           </form>
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// };
+
+// export default RoomForm;
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, TextField, Typography } from "@mui/material";
 
 const RoomForm = () => {
-  const [room, setRoom] = useState("");
   const navigate = useNavigate();
+  const [roomId, setRoomId] = useState(""); 
+  const [username, setUsername] = useState("");
 
-  const handleSubmit = (e) => {
+  // Handle Joining a Room
+  const handleJoinRoom = (e) => {
     e.preventDefault();
-    if (room.trim()) {
-      navigate(`/editor/${room}`);
+    if (roomId.trim() && username.trim()) {
+      navigate(`/editor/${roomId}?username=${encodeURIComponent(username)}`);
     }
   };
 
+  // Handle Creating a Room
+  const handleCreateRoom = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/rooms/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+  
+      if (!response.ok) throw new Error("Failed to create room");
+  
+      const data = await response.json();
+      navigate(`/editor/${data.roomId}`); // Redirect to the new room
+    } catch (error) {
+      console.error("Error creating room:", error);
+    }
+  };
+  
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-purple-600 to-blue-500 p-4">
       <Card sx={{ width: "100%", maxWidth: 400, boxShadow: 6, borderRadius: 3 }}>
         <CardContent sx={{ p: 4 }}>
           <Typography variant="h5" align="center" sx={{ fontWeight: "bold", color: "gray.800", mb: 3 }}>
-            Join a Room
+            Join or Create a Room
           </Typography>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <TextField
-              label="Enter Room ID"
-              variant="outlined"
-              fullWidth
-              value={room}
-              onChange={(e) => setRoom(e.target.value)}
-              sx={{ backgroundColor: "white", borderRadius: 2 }}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              sx={{
-                backgroundColor: "blue.600",
-                "&:hover": { backgroundColor: "blue.700" },
-                py: 1.5,
-                borderRadius: 2,
-              }}
-            >
-              Join Room
-            </Button>
-          </form>
+
+          <TextField
+            label="Enter Username"
+            variant="outlined"
+            fullWidth
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            sx={{ backgroundColor: "white", borderRadius: 2, mb: 2 }}
+          />
+
+          <TextField
+            label="Enter Room ID"
+            variant="outlined"
+            fullWidth
+            value={roomId}
+            onChange={(e) => setRoomId(e.target.value)}
+            sx={{ backgroundColor: "white", borderRadius: 2, mb: 2 }}
+          />
+
+          <Button
+            onClick={handleJoinRoom}
+            variant="contained"
+            fullWidth
+            sx={{ backgroundColor: "blue.600", "&:hover": { backgroundColor: "blue.700" }, py: 1.5, borderRadius: 2, mb: 2 }}
+          >
+            Enter Room
+          </Button>
+
+          <Button
+            onClick={handleCreateRoom}
+            variant="contained"
+            fullWidth
+            sx={{ backgroundColor: "green.600", "&:hover": { backgroundColor: "green.700" }, py: 1.5, borderRadius: 2 }}
+          >
+            Create Room
+          </Button>
         </CardContent>
       </Card>
     </div>
