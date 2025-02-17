@@ -298,6 +298,8 @@ import { Editor } from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
+import socket from "../socket"; // Adjust path based on your file structure
+
 
 const CodeEditor = () => {
   const { roomId } = useParams();
@@ -306,10 +308,11 @@ const CodeEditor = () => {
     new URLSearchParams(location.search).get("username") || "Anonymous";
   const [code, setCode] = useState("// Start coding...");
   const [users, setUsers] = useState([]);
-  const socket = io("http://localhost:5000", { query: { roomId, username } });
+
 
   useEffect(() => {
     // Emit the username to the server when joining
+    socket.connect(); // Connect the socket
     socket.emit("joinRoom", { roomId, username });
 
     // Listen for code changes
@@ -325,8 +328,11 @@ const CodeEditor = () => {
 
     // Cleanup on component unmount
     return () => {
+      socket.off("codeChange");
+      socket.off("USERS");
       socket.disconnect();
     };
+    
   }, [roomId, username]);
 
   const handleCodeChange = (newCode) => {
