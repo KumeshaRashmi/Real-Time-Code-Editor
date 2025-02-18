@@ -2,6 +2,7 @@ package com.codecollab.server;
 
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -12,6 +13,7 @@ public class Server {
         RoomManager roomManager = RoomManager.getInstance();
 
         try (ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT)) {
+            System.out.println(InetAddress.getLocalHost());
             System.out.println("Server is running on port " + Constants.SERVER_PORT);
 
             while (true) {
