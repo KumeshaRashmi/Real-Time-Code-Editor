@@ -2,7 +2,7 @@
 import { Editor } from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
+//import { io } from "socket.io-client";
 import socket from "../socket"; // Adjust path based on your file structure
 
 

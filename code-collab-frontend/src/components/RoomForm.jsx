@@ -25,7 +25,7 @@ const RoomForm = () => {
   const handleCreateRoom = async () => {
     try {
       const response = await fetch(
-        "http://192.168.157.121:8080/api/rooms/create",
+        "http://192.168.226.248:8080/api/rooms/create",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

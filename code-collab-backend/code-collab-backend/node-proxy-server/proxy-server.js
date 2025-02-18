@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://192.168.157.121/:5173", 
+    origin: ["http://192.168.204.248:5173","http://192.168.204.247:5173","http://192.168.204.121:5173"],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
