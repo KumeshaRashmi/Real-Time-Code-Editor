@@ -1,8 +1,8 @@
 import { Editor } from "@monaco-editor/react";
+import { Button, MenuItem, Select } from "@mui/material";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { Button, Select, MenuItem } from "@mui/material";
-import axios from "axios";
 import socket from "../socket"; // Adjust path based on your structure
 
 const CodeEditor = () => {
@@ -41,12 +41,12 @@ const CodeEditor = () => {
     setOutput("Running...");
 
     try {
-      const response = await axios.post("http://localhost:5003/execute", {
+      const response = await axios.post("http://localhost:5000/execute", {
         language,
         code,
       });
       setOutput(response.data.output);
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       setOutput("Error running code.");
     }

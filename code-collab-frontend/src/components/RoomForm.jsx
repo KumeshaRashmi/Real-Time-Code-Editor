@@ -24,13 +24,10 @@ const RoomForm = () => {
   // Handle Creating a Room
   const handleCreateRoom = async () => {
     try {
-      const response = await fetch(
-        "http://192.168.14.248:8082/api/rooms/create",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetch("http://localhost:8080/api/rooms/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (!response.ok) throw new Error("Failed to create room");
 

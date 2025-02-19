@@ -90,6 +90,8 @@ const io = socketIo(server, {
       "http://192.168.204.248:5173",
       "http://192.168.204.247:5173",
       "http://192.168.204.121:5173",
+      "http://localhost:5173",
+
     ],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
