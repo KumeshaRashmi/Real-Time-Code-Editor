@@ -87,7 +87,7 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: [
-      "http://192.168.204.248:5173",
+      "http://192.168.67.248:5173",
       "http://192.168.204.247:5173",
       "http://192.168.204.121:5173",
       "http://localhost:5173",
@@ -127,6 +127,17 @@ io.on("connection", (socket) => {
   socket.on("codeChange", ({ roomId, code }) => {
     io.to(roomId).emit("codeChange", { code, username: socket.username });
     console.log(`Code change in room ${roomId} by ${socket.username}`);
+  });
+
+  // Handle real-time language changes
+  socket.on("languageChange", ({ roomId, language }) => {
+    console.log(`Language changed to ${language} in room ${roomId}`);
+    socket.to(roomId).emit("languageChange", language);
+  });
+
+  // Handle execution output
+  socket.on("executionOutput", ({ roomId, output }) => {
+    socket.to(roomId).emit("executionOutput", output);
   });
 
   // Handle disconnection
