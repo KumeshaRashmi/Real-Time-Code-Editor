@@ -48,17 +48,34 @@ public class ClientHandler implements Runnable {
 
             // Notify all users in the room about the new user
             broadcastUserList(room);
+            out.println("CODE:" + room.getCode());
+            out.println("LANGUAGE:" + room.getLanguage());
 
             // Send the current code to the new user
-            out.println(room.getCode());
+            //out.println(room.getCode());
             System.out.println("Sent current code to user: " + username);
 
             // Handle code updates from the client
+            // String inputLine;
+            // while ((inputLine = in.readLine()) != null) {
+            //     System.out.println("Received code update from user " + username + ": " + inputLine);
+            //     room.setCode(inputLine);
+            //     broadcastCode(room, inputLine);
+            // }
+
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                System.out.println("Received code update from user " + username + ": " + inputLine);
-                room.setCode(inputLine);
-                broadcastCode(room, inputLine);
+                if (inputLine.startsWith("CODE:")) {
+                    String updatedCode = inputLine.substring(5);
+                    room.setCode(updatedCode);
+                    broadcastCode(room, updatedCode);
+                } else if (inputLine.startsWith("LANGUAGE:")) {
+                    String newLanguage = inputLine.substring(9);
+                    room.setLanguage(newLanguage);
+                } else if (inputLine.startsWith("RUN:")) {
+                    String output = executeCode(room.getLanguage(), room.getCode());
+                    room.setLastOutput(output);
+                }
             }
 
             // Remove the user when they disconnect
@@ -116,4 +133,10 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+    private String executeCode(String language, String code) {
+        // TODO: Implement actual execution logic based on language
+        return "Output of the code execution";
+    }
+    
+
 }

@@ -21,12 +21,20 @@ const CodeEditor = () => {
     socket.emit("joinRoom", { roomId, username });
 
     socket.on("codeChange", ({ code: newCode }) => setCode(newCode));
+   // Listen for language changes
+  socket.on("languageChange", (newLanguage) => {
+    console.log("Language updated to:", newLanguage);
+    setLanguage(newLanguage); // Fix: Ensuring state updates properly
+  });
+    socket.on("executionOutput", (executionOutput) => setOutput(executionOutput));
     socket.on("USERS", (userList) =>
       setUsers(userList.split(",").filter(Boolean))
     );
 
     return () => {
       socket.off("codeChange");
+      socket.off("languageChange");
+      socket.off("executionOutput");
       socket.off("USERS");
       socket.disconnect();
     };
@@ -35,6 +43,12 @@ const CodeEditor = () => {
   const handleCodeChange = (newCode) => {
     setCode(newCode);
     socket.emit("codeChange", { roomId, code: newCode });
+  };
+
+  const handleLanguageChange = (event) => {
+    const newLanguage = event.target.value;
+    setLanguage(newLanguage);
+    socket.emit("languageChange", { roomId, language: newLanguage });
   };
 
   const handleRunCode = async () => {
@@ -46,6 +60,7 @@ const CodeEditor = () => {
         code,
       });
       setOutput(response.data.output);
+      socket.emit("executionOutput", { roomId, output: response.data.output });
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
       setOutput("Error running code.");
@@ -77,7 +92,7 @@ const CodeEditor = () => {
             {/* Language Selector */}
             <Select
               value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              onChange={handleLanguageChange}
               className="bg-white text-black"
               size="small"
             >
