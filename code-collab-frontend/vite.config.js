@@ -9,7 +9,7 @@
 //     react()],
 //     server: {
 //     proxy: {
-//       "/api": "http://192.168.226.248:8080",
+//       "/api": "http://192.168.14.248:8082",
 //     },
 //   },
 // })
@@ -25,7 +25,7 @@ export default defineConfig({
   plugins: [tailwindcss(), react()],
   server: {
     proxy: {
-      "/api": "http://192.168.204.248:8080",
+      "/api": "http://localhost:8080",
     },
     host: "0.0.0.0",
     allowedHosts: [
